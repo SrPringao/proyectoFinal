@@ -1,3 +1,7 @@
-bin/.*
+bin/
 
 main.exe
+bin/main
+bin/main.dSYM/Contents/Info.plist
+bin/main.dSYM/Contents/Resources/DWARF/main
+bin/main.dSYM/Contents/Resources/Relocations/aarch64/main.yml
