@@ -1,6 +1,6 @@
 #pragma once
 
-// #include "Playlist.hpp"
+//#include "Playlist.hpp"
 #include <iostream>
 #include <vector>
 
@@ -31,6 +31,13 @@ class Usuario
 
         string getPais();
         void setPais(string);
+
+        //sobrecarga de operador mas para agregar una playlist
+        void operator+(Playlist* playlist);
+
+        void operator-(string nombre);
+
+        friend istream& operator>>(istream& input, Usuario& usuario);
 
     protected:
         string nombre;

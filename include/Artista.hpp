@@ -3,7 +3,6 @@
 #include "Usuario.hpp"
 #include "Cancion.hpp"
 
-
 #include <vector>
 #include <iostream>
 
@@ -17,8 +16,14 @@ class Artista:public Usuario
 
         void mostrarInfo() override;
 
-        void agregarCancion(Cancion*);
+        void agregarCancion(Cancion);
         void verCanciones();
+
+        //sobrecarga de operador mas para agregar una cancion
+        
+        void operator+(Cancion cancion);
+
+        friend istream& operator>>(istream& input, Artista& artista);
 
     protected:
         float regalias;

@@ -85,3 +85,49 @@ void Usuario::eliminarPlaylist(string nombre)
     }
     cout << "Playlist no encontrada" << endl;
 }
+
+void Usuario::mostrarPlaylists()
+{
+    if (playlists.empty())
+    {
+        cout << "No hay playlists registradas." << endl;
+        return;
+    }
+    cout << "Playlists:" << endl;
+    for (int i = 0; i < playlists.size(); i++)
+    {
+        cout << i + 1 << ". " << playlists[i]->getTitulo() << endl;
+    }
+}
+
+void Usuario::operator+(Playlist* playlist) {
+    playlists.push_back(playlist);
+}
+
+void Usuario::operator-(string nombre)
+{
+    for (int i = 0; i < playlists.size(); i++)
+    {
+        if (playlists[i]->getTitulo() == nombre)
+        {
+            playlists.erase(playlists.begin() + i);
+            cout << "Playlist eliminada" << endl;
+            return;
+        }
+    }
+    cout << "Playlist no encontrada" << endl;
+}
+
+istream& operator>>(istream& input, Usuario& usuario)
+{
+    cout << "Nombre: ";
+    input >> usuario.nombre;
+    cout << "Edad: ";
+    input >> usuario.edad;
+    cout << "Genero: ";
+    input >> usuario.genero;
+    cout << "Pais: ";
+    input >> usuario.pais;
+
+    return input;
+}
