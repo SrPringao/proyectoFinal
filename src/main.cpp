@@ -211,10 +211,7 @@ int main() {
                 break;
             }
             case 8:{
-                for (int i = 0; i < catalogo.size(); ++i) {
-                    catalogo[i]->mostrarInfo();
-                }
-                
+                listarPlaylists();
                 break;}
             case 9:{
                 
