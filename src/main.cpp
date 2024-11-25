@@ -119,7 +119,7 @@ int main() {
                                 break;
                             default:
                                 cout << "Opcion invalida" << endl;
-                                
+
                                 break;
                         }
                         encontrado = true;
@@ -151,7 +151,7 @@ int main() {
                 for (int i = 0; i < catalogo.size(); ++i) {
                     cout << i+1 << ". "<< catalogo[i]->getTitulo() << endl;
                 }
-                cout << "Ingrese el número de la playlist que desea eliminar: ";
+                cout << "Ingrese el numero de la playlist que desea eliminar: ";
                 int playlistIndex;
                 cin >> playlistIndex;
                 catalogo.erase(catalogo.begin() + playlistIndex - 1); 
@@ -159,6 +159,10 @@ int main() {
 
             }
             case 6:{
+                if (catalogo.empty()) {
+                    cout << "No hay playlists registradas para agregar canciones." << endl;
+                    break;
+                }
                 cout << "Elije la playlist" << endl;
                 for (int i = 0; i < catalogo.size(); ++i) {
                     cout << i+1 << ". "<< catalogo[i]->getTitulo() << endl;
@@ -168,8 +172,27 @@ int main() {
                 cout << "Ingrese el nombre de la cancion" << endl;
                 string nombreCancion;
                 cin >> nombreCancion;
-                Cancion* cancion = new Cancion(nombreCancion, 0, "", "", nullptr);
+                cout << "Ingrese la duracion de la cancion" << endl;
+                int duracion;
+                cin >> duracion;
+                cout << "Ingrese el genero de la cancion" << endl;
+                string genero;
+                cin >> genero;
+                cout << "Ingrese el album de la cancion" << endl;
+                string album;
+                cin >> album;
+
+                int artistaIndex = seleccionarUsuario();
+                if (artistaIndex < 0) {
+                    cout << "Artista no encontrado." << endl;
+                    break;
+                }
+                Cancion* cancion = new Cancion(nombreCancion, duracion, album, genero, dynamic_cast<Artista*>(usuarios[artistaIndex]));
+                
                 catalogo[playlistIndex - 1]->agregarCancion(cancion);
+
+                cout << "Cancion agregada exitosamente." << endl;
+                catalogo[playlistIndex - 1]->mostrarInfo() ;
 
                 break;
             }
@@ -194,12 +217,11 @@ int main() {
                 
                 break;}
             case 9:{
-                cout <<"Elije el usuario" << endl;
-                for (int i = 0; i < usuarios.size(); ++i) {
-                    cout << i+1 << ". "<< usuarios[i]->getNombre() << endl;
+                
+                if(catalogo.empty()){
+                    cout << "No hay canciones registradas" << endl;
+                    break;
                 }
-                int usuarioIndex;
-                cin >> usuarioIndex;
                 cout << "Ingrese el nombre de la cancion" << endl;
                 string nombreCancion;
                 cin >> nombreCancion;
@@ -234,11 +256,6 @@ int main() {
 }
 
 void listarUsuarios() {
-    if (usuarios.empty()) {
-        cout << "No hay usuarios registrados." << endl;
-        return;
-    }
-
     cout << "Usuarios registrados:" << endl;
     for (size_t i = 0; i < usuarios.size(); ++i) {
         cout << i + 1 << ". " << usuarios[i]->getNombre();
@@ -262,13 +279,18 @@ void listarPlaylists() {
 }
 
 int seleccionarUsuario() {
+    if (usuarios.empty()) {
+        cout << "No hay usuarios registrados." << endl;
+        return -1;
+    }
+    
     listarUsuarios();
     cout << "Seleccione el número del usuario: ";
     int index;
     cin >> index;
 
     if (index < 1 || index > usuarios.size()) {
-        cout << "Índice inválido." << endl;
+        cout << "Indice invalido." << endl;
         return -1;
     }
     return index - 1;
@@ -281,7 +303,7 @@ int seleccionarPlaylist() {
     cin >> index;
 
     if (index < 1 || index > catalogo.size()) {
-        cout << "Índice inválido." << endl;
+        cout << "Indice invalido." << endl;
         return -1;
     }
     return index - 1;
