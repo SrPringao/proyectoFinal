@@ -13,6 +13,7 @@ class Playlist:public Multimedia
 {
     public:
         Playlist();
+        Playlist(vector<Cancion*>, string, int);
 
         void agregarCancion(Cancion*);
         void eliminarCancion(string);
@@ -21,6 +22,7 @@ class Playlist:public Multimedia
 
     protected:
         vector<Cancion*> canciones;
+        string titulo;
 
 
 };

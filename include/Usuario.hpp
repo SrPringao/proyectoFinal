@@ -6,24 +6,37 @@
 
 using namespace std;
 
-// class Playlist; 
+class Playlist; 
 
 class Usuario
 {
     public:
         Usuario();
-        Usuario(string);
+        Usuario(string, int, string, string);
 
-        // void agregarPlaylist(Playlist*);
-        // void eliminarPlaylist(string);
+        void agregarPlaylist(Playlist*);
+        void eliminarPlaylist(string);
 
         void mostrarPlaylists();
+        virtual void mostrarInfo();
 
         string getNombre();
         void setNombre(string);
 
+        int getEdad();
+        void setEdad(int);
+
+        string getGenero();
+        void setGenero(string);
+
+        string getPais();
+        void setPais(string);
+
     protected:
         string nombre;
-        // vector<Playlist> playlists;
+        int edad;
+        string genero;
+        string pais;
+        vector<Playlist*> playlists;
 
 };

@@ -13,6 +13,9 @@ class Artista:public Usuario
 {
     public:
         Artista();
+        Artista(string, int, string, string, float);
+
+        void mostrarInfo() override;
 
         void agregarCancion(Cancion*);
         void verCanciones();

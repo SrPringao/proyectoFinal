@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 #include "Usuario.hpp"
 #include "Playlist.hpp"
@@ -8,87 +9,280 @@
 
 using namespace std;
 
+void listarUsuarios();
+void listarPlaylists();
+int seleccionarUsuario();
+int seleccionarPlaylist();
+
+vector<Usuario*> usuarios;
+vector<Playlist*> catalogo;
+
 int main() {
     cout << "Bienvenido" << endl;
-    cout << "Menu" << endl;
-    cout << "1. Crear usuario" << endl;
-    cout << "2. Eliminar usuario" << endl;
-    cout << "3. Crear playlist" << endl;
-    cout << "4. Eliminar playlist" << endl;
-    cout << "5. Agregar cancion a playlist" << endl;
-    cout << "6. Eliminar cancion de playlist" << endl;
-    cout << "7. Mostrar playlists" << endl;
-    cout << "8. Buscar cancion" << endl;
-    cout << "9. Salir" << endl;
-
     int opcion;
-    cin >> opcion;
-    switch(opcion){
-        case 1: {
-            cout << "Ingrese el nombre del usuario" << endl;
-            string nombre;
-            cin >> nombre;
-            Usuario* usuario = new Usuario(nombre);
+    
+    do
+    {
+        cout << "Menu" << endl;
+        cout << "1. Crear usuario" << endl;
+        cout << "2. Eliminar usuario" << endl;
+        cout << "3. Buscar usuario" << endl;
+        cout << "4. Crear playlist" << endl;
+        cout << "5. Eliminar playlist" << endl;
+        cout << "6. Agregar cancion a playlist" << endl;
+        cout << "7. Eliminar cancion de playlist" << endl;
+        cout << "8. Mostrar playlists" << endl;
+        cout << "9. Buscar cancion" << endl;
+        cout << "10. Salir" << endl;
 
-            cout << usuario->getNombre() << endl;
-            break;
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
+        switch(opcion){
+            case 1: {
+
+                cout << "Creacion de Usuario" << endl;
+                cout << "Elige que tipo de usuario deseas crear" << endl;
+                cout << "1. Usuario" << endl;
+                cout << "2. Artista" << endl;
+                int tipoUsuario;
+                cin >> tipoUsuario;
+
+                cout << "Ingrese el nombre" << endl;
+                string nombre;
+                cin >> nombre;
+
+                if (tipoUsuario == 1) {
+                    usuarios.push_back(new Usuario(nombre, 0, "", ""));
+                    cout << "Usuario creado exitosamente." << endl;
+                } else if (tipoUsuario == 2) {
+                    usuarios.push_back(new Artista(nombre, 0, "", "", 0));
+                    cout << "Artista creado exitosamente." << endl;
+                } else {
+                    cout << "Opcion invalida." << endl;
+                }
+
+                break;
+            }
+            case 2:
+            {
+                int userIndex = seleccionarUsuario();
+
+                if (userIndex >= 0 && userIndex < usuarios.size()) {
+                        
+                        string nombre = usuarios[userIndex]->getNombre();
+                        usuarios.erase(usuarios.begin() + userIndex); // Eliminar del vector
+                        cout << "Usuario " << nombre << " eliminado exitosamente." << endl;
+                        break;
+                } 
+
+            }
+            case 3:
+            {
+                cout << "Buscar Usuario o Artsta" << endl;
+                cout << "Ingrese el nombre del usuario" << endl;
+                string nombre;
+                cin >> nombre;
+
+                bool encontrado = false;
+                for (int i = 0; i < usuarios.size(); ++i) {
+                    if (usuarios[i]->getNombre() == nombre) {
+                        cout << "Usuario encontrado..." << endl;
+                        
+                        cout << "Menu de usuario" << endl;
+                        cout << "1. Mostrar info" << endl;
+                        cout << "2. Agregar playlist" << endl;
+                        cout << "3. Eliminar playlist" << endl;
+                        cout << "4. Salir" << endl;
+
+                        int opcionUsuario;
+                        cin >> opcionUsuario;
+
+                        switch(opcionUsuario){
+                            case 1:{
+                                usuarios[i]->mostrarInfo();
+                                break;
+                            }
+                            case 2:{
+                                cout << "Ingrese el nombre de la playlist" << endl;
+                                string nombre;
+                                cin >> nombre;
+                                Playlist* playlist = new Playlist( vector<Cancion*>(), nombre, 0);
+                                usuarios[i]->agregarPlaylist(playlist);
+                                break;
+                            }
+                            case 3:{
+                                cout << "Ingrese el nombre de la playlist" << endl;
+                                string nombre;
+                                cin >> nombre;
+                                usuarios[i]->eliminarPlaylist(nombre);
+                                }   
+                                break;
+                            default:
+                                cout << "Opcion invalida" << endl;
+                                
+                                break;
+                        }
+                        encontrado = true;
+                        break;
+                        }
+                }
+                if (!encontrado) {
+                    cout << "Usuario no encontrado" << endl;
+                }
+                break;
+            }
+            case 4:{
+                cout << "Ingrese el nombre de la playlist" << endl;
+                string titulo;
+                cin >> titulo;
+                Playlist* playlist = new Playlist( vector<Cancion*>(), titulo, 0);
+                catalogo.push_back(playlist);
+                break;
+            }
+            case 5:
+                {
+                if (catalogo.empty()) {
+                    cout << "No hay playlists registradas para eliminar." << endl;
+                    
+                }
+               
+                cout << "Eliminar Playlist" << endl;
+
+                for (int i = 0; i < catalogo.size(); ++i) {
+                    cout << i+1 << ". "<< catalogo[i]->getTitulo() << endl;
+                }
+                cout << "Ingrese el número de la playlist que desea eliminar: ";
+                int playlistIndex;
+                cin >> playlistIndex;
+                catalogo.erase(catalogo.begin() + playlistIndex - 1); 
+                 break;
+
+            }
+            case 6:{
+                cout << "Elije la playlist" << endl;
+                for (int i = 0; i < catalogo.size(); ++i) {
+                    cout << i+1 << ". "<< catalogo[i]->getTitulo() << endl;
+                }
+                int playlistIndex;
+                cin >> playlistIndex;
+                cout << "Ingrese el nombre de la cancion" << endl;
+                string nombreCancion;
+                cin >> nombreCancion;
+                Cancion* cancion = new Cancion(nombreCancion, 0, "", "", nullptr);
+                catalogo[playlistIndex - 1]->agregarCancion(cancion);
+
+                break;
+            }
+            case 7:{
+                cout << "Elije la playlist" << endl;
+                for (int i = 0; i < catalogo.size(); ++i) {
+                    cout << i+1 << ". "<< catalogo[i]->getTitulo() << endl;
+                }
+                int playlistIndex;
+                cin >> playlistIndex;
+                cout << "Ingrese el nombre de la cancion" << endl;
+                string nombreCancion;
+                cin >> nombreCancion;
+                catalogo[playlistIndex - 1]->eliminarCancion(nombreCancion);
+               
+                break;
+            }
+            case 8:{
+                for (int i = 0; i < catalogo.size(); ++i) {
+                    catalogo[i]->mostrarInfo();
+                }
+                
+                break;}
+            case 9:{
+                cout <<"Elije el usuario" << endl;
+                for (int i = 0; i < usuarios.size(); ++i) {
+                    cout << i+1 << ". "<< usuarios[i]->getNombre() << endl;
+                }
+                int usuarioIndex;
+                cin >> usuarioIndex;
+                cout << "Ingrese el nombre de la cancion" << endl;
+                string nombreCancion;
+                cin >> nombreCancion;
+                bool encontrado = false;
+                for (int i = 0; i < catalogo.size(); ++i) {
+                    if (catalogo[i]->getTitulo() == nombreCancion) {
+                        catalogo[i]->mostrarInfo();
+                        encontrado = true;
+                        break;
+                    }
+                }
+                if (!encontrado) {
+                    cout << "Cancion no encontrada" << endl;
+                }
+                
+                break;
+                }   
+            case 10:
+            {
+                cout << "Adios" << endl;
+                break;
+            }
+            default:
+            {
+                cout << "Opcion invalida" << endl;
+                break;
+            }
         }
-        // case 2:
-        //     cout << "Ingrese el nombre del usuario" << endl;
-        //     string nombre;
-        //     cin >> nombre;
-        //     usuario->eliminarUsuario(nombre);
-        //     break;
-        // case 3:
-        //     cout << "Ingrese el nombre de la playlist" << endl;
-        //     string nombre;
-        //     cin >> nombre;
-        //     Playlist* playlist = new Playlist(nombre);
-        //     usuario->agregarPlaylist(playlist);
-        //     break;
-        // case 4:
-        //     cout << "Ingrese el nombre de la playlist" << endl;
-        //     string nombre;
-        //     cin >> nombre;
-        //     usuario->eliminarPlaylist(nombre);
-        //     break;
-        // case 5:
-        //     cout << "Ingrese el nombre de la playlist" << endl;
-        //     string nombre;
-        //     cin >> nombre;
-        //     Playlist* playlist = usuario->buscarPlaylist(nombre);
-        //     cout << "Ingrese el nombre de la cancion" << endl;
-        //     string nombreCancion;
-        //     cin >> nombreCancion;
-        //     Cancion* cancion = usuario->buscarCancion(nombreCancion);
-        //     playlist->agregarCancion(cancion);
-        //     break;
-        // case 6:
-        //     cout << "Ingrese el nombre de la playlist" << endl;
-        //     string nombre;
-        //     cin >> nombre;
-        //     Playlist* playlist = usuario->buscarPlaylist(nombre);
-        //     cout << "Ingrese el nombre de la cancion" << endl;
-        //     string nombreCancion;
-        //     cin >> nombreCancion;
-        //     playlist->eliminarCancion(nombreCancion);
-        //     break;
-        // case 7:
-        //     usuario->mostrarPlaylists();
-        //     break;
-        // case 8:
-        //     cout << "Ingrese el nombre de la cancion" << endl;
-        //     string nombreCancion;
-        //     cin >> nombreCancion;
-        //     usuario->buscarCancion(nombreCancion);
-        //     break;
-        case 9:
-            cout << "Adios" << endl;
-            break;
-        default:
-            cout << "Opcion invalida" << endl;
-            break;
-    }
+    } while (opcion != 10);
 
     return 0;
+}
+
+void listarUsuarios() {
+    if (usuarios.empty()) {
+        cout << "No hay usuarios registrados." << endl;
+        return;
+    }
+
+    cout << "Usuarios registrados:" << endl;
+    for (size_t i = 0; i < usuarios.size(); ++i) {
+        cout << i + 1 << ". " << usuarios[i]->getNombre();
+        if (dynamic_cast<Artista*>(usuarios[i])) {
+            cout << " (Artista)";
+        }
+        cout << endl;
+    }
+}
+
+void listarPlaylists() {
+    if (catalogo.empty()) {
+        cout << "No hay playlists registradas." << endl;
+        return;
+    }
+
+    cout << "Playlists registradas:" << endl;
+    for (size_t i = 0; i < catalogo.size(); ++i) {
+        cout << i + 1 << ". " << catalogo[i]->getTitulo() << endl;
+    }
+}
+
+int seleccionarUsuario() {
+    listarUsuarios();
+    cout << "Seleccione el número del usuario: ";
+    int index;
+    cin >> index;
+
+    if (index < 1 || index > usuarios.size()) {
+        cout << "Índice inválido." << endl;
+        return -1;
+    }
+    return index - 1;
+}
+
+int seleccionarPlaylist() {
+    listarPlaylists();
+    cout << "Seleccione el número de la playlist: ";
+    int index;
+    cin >> index;
+
+    if (index < 1 || index > catalogo.size()) {
+        cout << "Índice inválido." << endl;
+        return -1;
+    }
+    return index - 1;
 }
