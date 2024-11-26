@@ -1,8 +1,8 @@
 #include "Multimedia.hpp"
 Multimedia::Multimedia()
 {
-    titulo = "Sin titulo";
-    duracion = 120;
+    titulo = "No tiene";
+    duracion = 0;
 }
 
 Multimedia::Multimedia(string titulo, int duracion)
@@ -13,7 +13,7 @@ Multimedia::Multimedia(string titulo, int duracion)
 }
 
 string Multimedia::getTitulo(){
-return titulo;
+    return titulo;
 }
 
 void Multimedia::setTitulo(string titulo)

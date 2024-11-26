@@ -2,7 +2,8 @@
 
 Playlist::Playlist()
 {
-     this->canciones = vector<Cancion*>(); //vector vacio
+    this->titulo = "";
+    this->canciones = vector<Cancion*>(); //vector vacio
 }
 
 Playlist::Playlist(vector<Cancion*> canciones, string titulo, int duracion) : Multimedia(titulo,duracion)
@@ -36,4 +37,20 @@ void Playlist::mostrarInfo()
         cout << i+1 << ". ";
         canciones[i]->mostrarInfo();
     }
+}
+
+void Playlist::operator+(Cancion* cancion)
+{
+    canciones.push_back(cancion);
+}
+
+istream& operator>>(istream& input, Playlist& playlist)
+{
+    cout << "Titulo: ";
+    input.ignore();
+    input >> playlist.titulo;
+    cout << "Duracion: ";
+    input >> playlist.duracion;
+
+    return input;
 }

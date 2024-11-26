@@ -20,9 +20,13 @@ class Playlist:public Multimedia
 
         void mostrarInfo() override;
 
+        //sobrecarga de operador mas para agregar una cancion
+        void operator+(Cancion* cancion);
+
+        friend istream& operator>>(istream& input, Playlist& playlist);
+        
+
     protected:
         vector<Cancion*> canciones;
-        string titulo;
-
 
 };

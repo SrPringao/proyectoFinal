@@ -18,7 +18,8 @@ void Cancion::mostrarInfo() {
     cout << "Titulo: " << getTitulo() << endl;
     cout << "Genero: " << genero << endl;
     cout << "Album: " << album << endl;
-    cout << "Artista: " << artista->getNombre() << endl;
+    cout << "Duracion: " << duracion << endl;
+
 }
 
 string Cancion::getGenero() {
@@ -43,4 +44,17 @@ Artista* Cancion::getArtista() {
 
 void Cancion::setArtista(Artista* artista) {
     this->artista = artista;
+}
+
+istream& operator>>(istream& input, Cancion& cancion) {
+    cout << "Titulo: ";
+    input >> cancion.titulo;
+    cout << "Duracion: ";
+    input >> cancion.duracion;
+    cout << "Genero: ";
+    input >> cancion.genero;
+    cout << "Album: ";
+    input >> cancion.album;
+
+    return input;
 }

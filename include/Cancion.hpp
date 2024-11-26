@@ -28,6 +28,8 @@ class Cancion:public Multimedia
 
         Artista* getArtista();
         void setArtista(Artista*);
+        
+        friend istream& operator>>(istream& input, Cancion& cancion);
 
     
 };

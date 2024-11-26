@@ -1,6 +1,9 @@
 {
   "C_Cpp_Runner.msvcBatchPath": "",
   "files.associations": {
-    "*.tpp": "cpp"
+    "*.tpp": "cpp",
+    "iostream": "cpp",
+    "ostream": "cpp",
+    "iosfwd": "cpp"
   }
 }
