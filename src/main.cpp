@@ -34,6 +34,11 @@ int main()
     catalogo.push_back(new Playlist(vector<Cancion *>(), "Playlist 3", 0));
     catalogo.push_back(new Playlist(vector<Cancion *>(), "Playlist 4", 0));
     catalogo.push_back(new Playlist(vector<Cancion *>(), "Playlist 5", 0));
+
+    catalogo[0]->agregarCancion(new Cancion("Boda", 3, "Album 1", "Pop", dynamic_cast<Artista *>(usuarios[0])));
+    catalogo[0]->agregarCancion(new Cancion("Cancion 2", 4, "Siempre", "Rock", dynamic_cast<Artista *>(usuarios[0])));
+    catalogo[0]->agregarCancion(new Cancion("Cancion 3", 5, "Nunca", "Pop", dynamic_cast<Artista *>(usuarios[0])));
+    catalogo[0]->agregarCancion(new Cancion("Cancion 4", 6, "Quizas", "Rock", dynamic_cast<Artista *>(usuarios[0])));
     do
     {
         menu();
@@ -180,7 +185,13 @@ int main()
             cout << "Ingrese el numero de la playlist que desea eliminar: ";
             int playlistIndex;
             cin >> playlistIndex;
+            if (playlistIndex < 1 || playlistIndex > catalogo.size())
+            {
+                cout << "Indice invalido." << endl;
+                break;
+            }
             catalogo.erase(catalogo.begin() + playlistIndex - 1);
+
             break;
         }
         case 6:
@@ -197,9 +208,6 @@ int main()
             }
             int playlistIndex;
             cin >> playlistIndex;
-
-           
-
             int artistaIndex = seleccionarUsuario();
             if (artistaIndex < 0)
             {
@@ -209,10 +217,8 @@ int main()
             Cancion *cancion = new Cancion();
             cin >> *cancion;
             
-
             (*catalogo[playlistIndex - 1]) + cancion;
             //catalogo[playlistIndex - 1]->agregarCancion(cancion);
-
             cout << "Cancion agregada exitosamente." << endl;
             catalogo[playlistIndex - 1]->mostrarInfo();
 
@@ -231,6 +237,7 @@ int main()
             string nombreCancion;
             cin >> nombreCancion;
             catalogo[playlistIndex - 1]->eliminarCancion(nombreCancion);
+            catalogo[playlistIndex - 1]->mostrarInfo();
 
             break;
         }
@@ -239,34 +246,47 @@ int main()
             listarPlaylists();
             break;
         }
-        case 9:
-        {
-
-            if (catalogo.empty())
+       case 9:
             {
-                cout << "No hay canciones registradas" << endl;
-                break;
-            }
-            cout << "Ingrese el nombre de la cancion" << endl;
-            string nombreCancion;
-            cin >> nombreCancion;
-            bool encontrado = false;
-            for (int i = 0; i < catalogo.size(); ++i)
-            {
-                if (catalogo[i]->getTitulo() == nombreCancion)
+                if (catalogo.empty()) // Validación inicial
                 {
-                    catalogo[i]->mostrarInfo();
-                    encontrado = true;
+                    cout << "No hay playlists registradas." << endl;
                     break;
                 }
-            }
-            if (!encontrado)
-            {
-                cout << "Cancion no encontrada" << endl;
-            }
+                cout << "Ingrese el nombre de la cancion: ";
+                string nombreCancion;
+                getline(cin, nombreCancion); // Permite nombres con espacios
 
-            break;
-        }
+                bool encontrado = false; 
+
+                // Iterar sobre cada playlist en el catálogo
+                for (int i = 0; i < catalogo.size(); ++i)
+                {
+                    vector<Cancion *> canciones = catalogo[i]->getCanciones();
+
+                    // Buscar en las canciones de la playlist
+                    for (int j = 0; j < canciones.size(); ++j)
+                    {
+                        if (canciones[j]->getTitulo() == nombreCancion) // Compara el nombre de la canción
+                        {
+                            cout << "\nCancion encontrada en la playlist: " 
+                                << catalogo[i]->getTitulo() << endl;
+                            canciones[j]->mostrarInfo(); // Muestra la información de la canción
+                            encontrado = true;
+                            break;
+                        }
+                    }
+                    if (encontrado)
+                    {
+                        break; }
+                }
+
+                if (!encontrado) // Mensaje si no se encontró la canción
+                {
+                    cout << "Cancion no encontrada en ninguna playlist." << endl;
+                }
+                break;
+            }
         case 10:
         {
             cout << "Adios" << endl;

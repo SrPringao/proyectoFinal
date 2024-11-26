@@ -16,6 +16,11 @@ void Playlist::agregarCancion(Cancion* cancion)
     canciones.push_back(cancion);
 }
 
+vector<Cancion*> Playlist::getCanciones()
+{
+    return canciones;
+}
+
 void Playlist::eliminarCancion(string nombre)
 {
     for (int i = 0; i < canciones.size(); i++)

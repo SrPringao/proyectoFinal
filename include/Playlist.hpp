@@ -18,6 +18,8 @@ class Playlist:public Multimedia
         void agregarCancion(Cancion*);
         void eliminarCancion(string);
 
+        vector<Cancion*> getCanciones();
+
         void mostrarInfo() override;
 
         //sobrecarga de operador mas para agregar una cancion
